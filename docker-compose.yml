@@ -1,0 +1,67 @@
+version: "3"
+services:
+    php:
+        cap_add:
+            - SYS_PTRACE
+        build:
+            context: ./php
+            dockerfile: Dockerfile
+        volumes:
+            - ./php/etc:/usr/local/etc:rw
+            - /var/app:/var/app:rw
+            - /Users/Xaviers/xm/branches:/app:rw
+            - /Users/Xaviers/code:/code:rw
+        environment:
+            - TZ=Asia/Shanghai
+        ports:
+            - "9000:9000"
+        networks:
+            - net
+
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./nginx/etc:/etc/nginx:ro
+            - /Users/Xaviers/xm/branches:/app:rw
+            - /Users/Xaviers/code:/code:rw
+        ports:
+            - "80:80"
+            - "8080:8080"
+        command: [nginx-debug, "-g", "daemon off;"]
+        environment:
+            - TZ=Asia/Shanghai
+        networks:
+            - net
+        depends_on:
+            - php
+            - mysql
+            - redis
+
+    mysql:
+        image: mysql:5.7.24
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+            - ./mysql/etc:/etc/mysql
+        environment:
+            - TZ=Asia/Shanghai
+            - MYSQL_ROOT_PASSWORD=password!666
+        ports:
+            - "3306:3306"
+        networks:
+            - net
+
+    redis:
+        image: redis:latest
+        environment:
+            - TZ=Asia/Shanghai
+        volumes:
+            - ./redis/data:/data
+            - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+        ports:
+            - "6379:6379"
+        networks:
+            - net
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+networks:
+    net:
