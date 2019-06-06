@@ -27,6 +27,7 @@ services:
         ports:
             - "80:80"
             - "8080:8080"
+            - "443:443"
         command: [nginx-debug, "-g", "daemon off;"]
         environment:
             - TZ=Asia/Shanghai
