@@ -3,6 +3,7 @@ FROM php:7.2.14-fpm
 ENV EXT_DIR=/usr/src/ext
 
 COPY ./ext $EXT_DIR
+COPY ./etc/apt/sources.list /etc/apt/sources.list
 
 RUN docker-php-source extract \
 && docker-php-ext-install \
@@ -13,4 +14,12 @@ bcmath \
 $EXT_DIR/redis-4.2.0.tgz \
 $EXT_DIR/xdebug-2.6.0.tgz 
 
+RUN apt-get clean && \
+		apt-get update && \
+		apt-get install -y \
+		libzip-dev \
+		&& docker-php-ext-install zip \
+		&& docker-php-ext-enable zip
 
+COPY ./ca-certificates/curl.pem /usr/share/ca-certificates/curl.pem
+ENV CURLOPT_CAINFO=/usr/share/ca-certificates/curl.pem

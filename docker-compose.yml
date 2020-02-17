@@ -8,9 +8,10 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ./php/etc:/usr/local/etc:rw
-            - /var/app:/var/app:rw
+            - /private/var/app:/var/app:rw
             - /Users/Xaviers/xm/branches:/app:rw
             - /Users/Xaviers/code:/code:rw
+            - /private/var/data:/data:rw
         environment:
             - TZ=Asia/Shanghai
         ports:
@@ -35,34 +36,34 @@ services:
             - net
         depends_on:
             - php
-            - mysql
-            - redis
+            #- mysql
+            #- redis
 
-    mysql:
-        image: mysql:5.7.24
-        volumes:
-            - ./mysql/data:/var/lib/mysql
-            - ./mysql/etc:/etc/mysql
-        environment:
-            - TZ=Asia/Shanghai
-            - MYSQL_ROOT_PASSWORD=password!666
-        ports:
-            - "3306:3306"
-        networks:
-            - net
+    #mysql:
+    #    image: mysql:5.7.24
+    #    volumes:
+    #        - ./mysql/data:/var/lib/mysql
+    #        - ./mysql/etc:/etc/mysql
+    #    environment:
+    #        - TZ=Asia/Shanghai
+    #        - MYSQL_ROOT_PASSWORD=password!666
+    #    ports:
+    #        - "3306:3306"
+    #    networks:
+    #        - net
 
-    redis:
-        image: redis:latest
-        environment:
-            - TZ=Asia/Shanghai
-        volumes:
-            - ./redis/data:/data
-            - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-        ports:
-            - "6379:6379"
-        networks:
-            - net
-        command: redis-server /usr/local/etc/redis/redis.conf
+    #redis:
+    #    image: redis:latest
+    #    environment:
+    #        - TZ=Asia/Shanghai
+    #    volumes:
+    #        - ./redis/data:/data
+    #        - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    #    ports:
+    #        - "6379:6379"
+    #    networks:
+    #        - net
+    #    command: redis-server /usr/local/etc/redis/redis.conf
 
 networks:
     net:
