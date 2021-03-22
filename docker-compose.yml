@@ -1,43 +1,64 @@
 version: "3"
 services:
-    php:
-        cap_add:
-            - SYS_PTRACE
-        build:
-            context: ./php
-            dockerfile: Dockerfile
-        volumes:
-            - ./php/etc:/usr/local/etc:rw
-            - /private/var/app:/var/app:rw
-            - /Users/Xaviers/xm/branches:/app:rw
-            - /Users/Xaviers/code:/code:rw
-            - /private/var/data:/data:rw
-        environment:
-            - TZ=Asia/Shanghai
-        ports:
-            - "9000:9000"
-        networks:
-            - net
+    #     php7.4.1-fpm:
+    #         cap_add:
+    #             - SYS_PTRACE
+    #         build:
+    #             context: ./php7.4.1-fpm
+    #             dockerfile: Dockerfile
+    #         volumes:
+    #             - ./php7.4.1-fpm/etc:/usr/local/etc:rw
+    #             - /private/var/app:/var/app:rw
+    #             - /Users/Xaviers/xm/branches:/app:rw
+    #             - /Users/Xaviers/code:/code:rw
+    #             - /private/var/data:/data:rw
+    #             - /private/var/runtime:/var/runtime:rw
+    #         environment:
+    #             - TZ=Asia/Shanghai
+    #         ports:
+    #             - "9000:9000"
+    #         networks:
+    #             - net
 
-    nginx:
-        image: nginx:latest
-        volumes:
-            - ./nginx/etc:/etc/nginx:ro
-            - /Users/Xaviers/xm/branches:/app:rw
-            - /Users/Xaviers/code:/code:rw
-        ports:
-            - "80:80"
-            - "8080:8080"
-            - "443:443"
-        command: [nginx-debug, "-g", "daemon off;"]
-        environment:
-            - TZ=Asia/Shanghai
-        networks:
-            - net
-        depends_on:
-            - php
-            #- mysql
-            #- redis
+    # php:
+    #     cap_add:
+    #         - SYS_PTRACE
+    #     build:
+    #         context: ./php7.2.14-fpm
+    #         dockerfile: Dockerfile
+    #     volumes:
+    #         - ./php/etc:/usr/local/etc:rw
+    #         - /private/var/app:/var/app:rw
+    #         - /Users/Xaviers/xm/branches:/app:rw
+    #         - /Users/Xaviers/code:/code:rw
+    #         - /private/var/data:/data:rw
+    #         - /private/var/runtime:/var/runtime:rw
+    #     environment:
+    #         - TZ=Asia/Shanghai
+    #     ports:
+    #         - "9000:9000"
+    #     networks:
+    #         - net
+
+    # nginx:
+    #     image: nginx:latest
+    #     volumes:
+    #         - ./nginx/etc:/etc/nginx:ro
+    #         - /Users/Xaviers/xm/branches:/app:rw
+    #         - /Users/Xaviers/code:/code:rw
+    #     ports:
+    #         - "80:80"
+    #         - "8080:8080"
+    #         - "443:443"
+    #     command: [nginx-debug, "-g", "daemon off;"]
+    #     environment:
+    #         - TZ=Asia/Shanghai
+    #     networks:
+    #         - net
+    #     depends_on:
+    #         - php7.4.1-fpm
+    #         #- mysql
+    #         #- redis
 
     mysql:
         image: mysql:5.7.24
@@ -52,17 +73,17 @@ services:
         networks:
             - net
 
-    redis:
-        image: redis:latest
-        environment:
-            - TZ=Asia/Shanghai
-        volumes:
-            - ./redis/data:/data
-            - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-        ports:
-            - "6379:6379"
-        networks:
-            - net
-        command: redis-server /usr/local/etc/redis/redis.conf
+    # redis:
+    #     image: redis:latest
+    #     environment:
+    #         - TZ=Asia/Shanghai
+    #     volumes:
+    #         - ./redis/data:/data
+    #         - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    #     ports:
+    #         - "6379:6379"
+    #     networks:
+    #         - net
+    #     command: redis-server /usr/local/etc/redis/redis.conf
 networks:
     net:
